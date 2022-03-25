@@ -239,4 +239,6 @@ void RBtree::postorderUtil(Nodo* root, std::vector<int>* v) {
 
 // Eliminacion
 
+void RBtree::eliminarNodo(int dato) {
 
+}

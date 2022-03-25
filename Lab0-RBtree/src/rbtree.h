@@ -48,7 +48,7 @@ public:
     std::vector<int> postorder();
 
     // Eliminacion
-
+    void eliminarNodo(int);
 
     ~RBtree();
 };
