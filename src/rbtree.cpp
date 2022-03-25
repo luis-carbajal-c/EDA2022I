@@ -193,44 +193,47 @@ RBtree::~RBtree(){
 // Recorridos
 
 std::vector<int> RBtree::inorder(){
-    std::vector<int> v;
-    inorderUtil(root, &v);
+    std::vector<int> v; // Vector con nodos en orden inorder
+    inorderUtil(root, &v); // Llamada recursiva
     return v;
 }
 
 void RBtree::inorderUtil(Nodo* root, std::vector<int>* v) {
+    // Condicion de parada (root == nullptr)
     if (root != nullptr) {
-        inorderUtil(root->left, v);
-        v->push_back(root->dato);
-        inorderUtil(root->right, v);
+        inorderUtil(root->left, v);     // Left
+        v->push_back(root->dato);       // Root
+        inorderUtil(root->right, v);    // Right
     }
 }
 
 std::vector<int> RBtree::preorder(){
-    std::vector<int> v;
-    preorderUtil(root, &v);
+    std::vector<int> v; // Vector con nodos en orden preorder
+    preorderUtil(root, &v); // Llamada recursiva
     return v;
 }
 
 void RBtree::preorderUtil(Nodo* root, std::vector<int>* v) {
+    // Condicion de parada (root == nullptr)
     if (root != nullptr) {
-        v->push_back(root->dato);
-        preorderUtil(root->left, v);
-        preorderUtil(root->right, v);
+        v->push_back(root->dato);       // Root
+        preorderUtil(root->left, v);    // Left
+        preorderUtil(root->right, v);   // Right
     }
 }
 
 std::vector<int> RBtree::postorder(){
-    std::vector<int> v;
-    postorderUtil(root, &v);
+    std::vector<int> v; // Vector con nodos en orden preorder
+    postorderUtil(root, &v); // Llamada recursiva
     return v;
 }
 
 void RBtree::postorderUtil(Nodo* root, std::vector<int>* v) {
+    // Condicion de parada (root == nullptr)
     if (root != nullptr) {
-        postorderUtil(root->left, v);
-        postorderUtil(root->right, v);
-        v->push_back(root->dato);
+        postorderUtil(root->left, v);   // Left
+        postorderUtil(root->right, v);  // Right
+        v->push_back(root->dato);       // Root
     }
 }
 

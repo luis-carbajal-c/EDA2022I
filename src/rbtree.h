@@ -33,6 +33,7 @@ private:
     void rotarIzquierda(Nodo* &);
     void rotarDerecha  (Nodo* &);
 
+    // Funciones de utilidad para realizar recurrencia en los recorridos
     void inorderUtil(Nodo* root, std::vector<int>* v);
     void preorderUtil(Nodo* root, std::vector<int>* v);
     void postorderUtil(Nodo* root, std::vector<int>* v);
@@ -45,6 +46,9 @@ public:
     std::vector<int> inorder();
     std::vector<int> preorder();
     std::vector<int> postorder();
+
+    // Eliminacion
+
 
     ~RBtree();
 };
