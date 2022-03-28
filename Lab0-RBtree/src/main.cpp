@@ -5,14 +5,17 @@
 int main() {
     // Crear RBtree y llenar de datos iniciales
     RBtree rbt;
+    rbt.insertar(7);
     rbt.insertar(5);
-    rbt.insertar(1);
-    rbt.insertar(10);
+    rbt.insertar(9);
     rbt.insertar(4);
     rbt.insertar(3);
+    rbt.insertar(6);
+    rbt.insertar(10);
     rbt.insertar(8);
+    rbt.insertar(12);
 
-    std::cout << "valores insertados: 5 1 10 4 3 8\n";
+    std::cout << "valores insertados: 7, 5, 9, 4, 3, 6, 10, 8 y 12\n";
     
     // Hacer los tres recorridos sobre el RBtree creado
     std::vector<int> v1 = rbt.inorder();
@@ -32,11 +35,12 @@ int main() {
     for (auto elem : v3) {
         std::cout << elem << " ";
     }
-
+    
     // Eliminar algunos nodos del RBtree
     rbt.eliminarNodo(4);
-    rbt.eliminarNodo(3);
-    std::cout << "\n\nnodos eliminados: 4 3\n";
+    rbt.eliminarNodo(9);
+    rbt.eliminarNodo(10);
+    std::cout << "\n\nnodos eliminados: 4, 9 y 10\n";
 
     // Volver a hacer los recorridos
     v1 = rbt.inorder();

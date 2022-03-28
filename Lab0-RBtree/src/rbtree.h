@@ -38,6 +38,10 @@ private:
     void preorderUtil(Nodo* root, std::vector<int>* v);
     void postorderUtil(Nodo* root, std::vector<int>* v);
 
+    // Funciones de utilidad para la eliminacion
+    void eliminarNodoUtil(Nodo* nodo);
+    void corregirEliminacion(Nodo* nodo);
+
 public:
     RBtree();
     void insertar(int);
