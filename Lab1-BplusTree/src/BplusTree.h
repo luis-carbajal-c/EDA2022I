@@ -6,7 +6,6 @@
 struct Node {
     std::vector<int> keys;
     std::vector<Node*> children;
-    Node* parent;
     bool isLeaf;
 
     Node();
@@ -18,6 +17,8 @@ private:
     int m;
 
     void insertarUtil(Node* node, Node* parent, int value);
+    void destroyRecursive(Node* node);
+    Node* getParent(Node* current, Node* child);
 
 public:
     BplusTree();

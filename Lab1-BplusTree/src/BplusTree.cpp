@@ -3,10 +3,10 @@
 #include <queue>
 #include <iostream>
 #include <math.h>
+#include <fstream>
 
 Node::Node() {
     isLeaf = false;
-    parent = nullptr;
 }
 
 BplusTree::BplusTree(){
@@ -19,7 +19,18 @@ BplusTree::BplusTree(int m){
     this->m = m;
 }
 
-BplusTree::~BplusTree() {}
+BplusTree::~BplusTree() {
+    destroyRecursive(root);
+}
+
+void BplusTree::destroyRecursive(Node* node) {
+    if (node) {
+        for (auto elem : node->children) {
+            destroyRecursive(elem);
+        }
+        delete node;
+    }
+}
 
 void BplusTree::insertar(int value) {
     if (root == nullptr) {
@@ -66,8 +77,6 @@ void BplusTree::insertar(int value) {
                 newParent->keys.push_back(newNode->keys[0]);
                 newParent->children.push_back(current);
                 newParent->children.push_back(newNode);
-                current->parent = newParent;
-                newNode->parent = newParent;
                 root = newParent;
             } else {
                 insertarUtil(newNode, parent, newNode->keys[0]);
@@ -83,7 +92,6 @@ void BplusTree::insertarUtil(Node* node, Node* parent, int value) {
         while (parent->keys[cont] < value && cont < parent->keys.size()) cont++;
         parent->keys.insert(parent->keys.begin() + cont, value);
         parent->children.insert(parent->children.begin() + cont + 1, node);
-        node->parent = parent;
     } else {
         Node* newNode = new Node();
 
@@ -99,13 +107,11 @@ void BplusTree::insertarUtil(Node* node, Node* parent, int value) {
         parent->children.clear();
         for (int i = 0; i < floor(m/2); i++) {
             parent->keys.push_back(tempKeys[i]);
-            tempChildren[i]->parent = parent;
             parent->children.push_back(tempChildren[i]);
         }
         parent->children.push_back(tempChildren[floor(m/2)]);
         for (int i = floor(m/2) + 1; i < tempKeys.size(); i++) {
             newNode->keys.push_back(tempKeys[i]);
-            tempChildren[i]->parent = newNode;
             newNode->children.push_back(tempChildren[i]);
         }
         newNode->children.push_back(tempChildren[tempKeys.size()]);
@@ -115,11 +121,9 @@ void BplusTree::insertarUtil(Node* node, Node* parent, int value) {
             newParent->keys.push_back(tempKeys[floor(m/2)]);
             newParent->children.push_back(parent);
             newParent->children.push_back(newNode);
-            parent->parent = newParent;
-            newNode->parent = newParent;
             root = newParent;
         } else {
-            insertarUtil(newNode, parent->parent, tempKeys[floor(m/2)]);
+            insertarUtil(newNode, getParent(root, parent), tempKeys[floor(m/2)]);
         }
     }
 }
@@ -129,6 +133,8 @@ void BplusTree::borrar(int value) {
 }
 
 void BplusTree::bfs() {
+    std::ofstream outfile("bfs.txt");
+
     if (root == nullptr) return;
 
     std::queue<Node*> q;
@@ -137,15 +143,34 @@ void BplusTree::bfs() {
     int cont = 1;
     while (!q.empty()) {
         Node* node = q.front();
-        std::cout << "Node " << cont++ << ": ";
+        outfile << "Node " << cont++ << ": ";
         for (auto elem : node->keys) {
-            std::cout << elem << " ";
+            outfile << elem << " ";
         }
-        std::cout << std::endl;
+        outfile << std::endl;
         q.pop();
 
         for (auto elem : node->children) {
             q.push(elem);
         }
     }
+
+    outfile.close();
+}
+
+Node* BplusTree::getParent(Node* current, Node* child) {
+    Node* parent;
+    if (current->isLeaf || current->children[0]->isLeaf) return nullptr;
+
+    for (int i = 0; i < current->children.size(); i++) {
+        if (current->children[i] == child) {
+            parent = current;
+            return parent;
+        } else {
+            parent = getParent(current->children[i], child);
+            if (parent != nullptr) return parent;
+        }
+    }
+
+    return parent;
 }

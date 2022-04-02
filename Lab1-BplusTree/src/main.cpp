@@ -23,19 +23,23 @@ int main() {
     for (int t=0; t<10; ++t){
         
         auto tree = new BplusTree();
-        
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        
         for (int i=0; i<1000000; ++i){
-            tree->insertar( datos[i] );
+            tree->insertar(datos[i]);
         }
+        
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
         // Calcular tiempo
         auto tiempo = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
         tiempoInseccion += tiempo;
+
+        if (t == 0) tree->bfs();
     }
 
-    std::cout << tiempoInseccion << std::endl;
+    std::cout << "Tiempo total: " << tiempoInseccion << std::endl;
+    texto.close();
 
     delete[] datos;
     return 0;
