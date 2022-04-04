@@ -7,7 +7,7 @@
 
 int main() {
     // Read file
-    std::ifstream texto;
+    /*std::ifstream texto;
     texto.open("../output.txt");
 
     int* datos = new int[1000000];
@@ -42,9 +42,9 @@ int main() {
     texto.close();
 
     delete[] datos;
-    return 0;
+    return 0;*/
 
-    /* Test using visualization tool:
+    /* Test using visualization tool:*/
     
     auto bpt = new BplusTree(4);
 
@@ -61,7 +61,13 @@ int main() {
     bpt->insertar(28);
     bpt->insertar(42);
 
-    bpt->insertar(27);
+    bpt->borrar(21);
+    bpt->borrar(31);
+    bpt->borrar(20);
+    bpt->borrar(10);
+    bpt->borrar(7);
+
+    /*bpt->insertar(27);
     bpt->insertar(26);
     bpt->insertar(29);
     bpt->insertar(30);
@@ -78,7 +84,7 @@ int main() {
     bpt->insertar(57);
     bpt->insertar(58);
     bpt->insertar(59);
-    bpt->insertar(60);
+    bpt->insertar(60);*/
 
-    bpt->bfs();*/
+    bpt->bfs();
 }

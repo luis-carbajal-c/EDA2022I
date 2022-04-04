@@ -4,6 +4,7 @@
 #include <iostream>
 #include <math.h>
 #include <fstream>
+#include <algorithm>
 
 Node::Node() {
     isLeaf = false;
@@ -128,8 +129,79 @@ void BplusTree::insertarUtil(Node* node, Node* parent, int value) {
     }
 }
 
+Node* BplusTree::getParent(Node* current, Node* child) {
+    Node* parent;
+    if (current->isLeaf || current->children[0]->isLeaf) return nullptr;
+
+    for (int i = 0; i < current->children.size(); i++) {
+        if (current->children[i] == child) {
+            parent = current;
+            return parent;
+        } else {
+            parent = getParent(current->children[i], child);
+            if (parent != nullptr) return parent;
+        }
+    }
+
+    return parent;
+}
+
 void BplusTree::borrar(int value) {
-    return;
+    if (root == nullptr) {
+        return;
+    } else {
+        Node* current = root;
+        Node* inner = nullptr;
+        int innerIdx;
+        Node* parent = nullptr;
+        int parentIdx;
+        Node* leftSibling = nullptr;
+        Node* rightSibling = nullptr;
+
+        while (!current->isLeaf) {
+            parent = current;
+            leftSibling = nullptr;
+            rightSibling = nullptr;
+
+            for (int i = 0; i < current->keys.size(); i++) {
+                parentIdx = i;
+
+                if (current->keys[i] == value) {
+                    inner = current;
+                    innerIdx = i;
+                }
+
+                if (value < current->keys[i]) {
+                    if (i > 0) leftSibling = current->children[i-1];
+                    rightSibling = current->children[i+1];
+                    current = current->children[i];
+                    break;
+                }
+                if (i == current->keys.size() - 1) {
+                    leftSibling = current->children[i]; 
+                    current = current->children[i+1];
+                    break;
+                }
+            }
+        }
+        
+        current->keys.erase(std::remove(current->keys.begin(), current->keys.end(), value), current->keys.end());
+        if (current->keys.size() < ceil(m/2) - 1) {
+            if (leftSibling != nullptr) {
+                current->keys.insert(current->keys.begin(), leftSibling->keys[leftSibling->keys.size()-1]);
+                leftSibling->keys.pop_back();
+                parent->keys[parentIdx-1] = current->keys[0];
+            } else if (rightSibling != nullptr) {
+                current->keys.push_back(rightSibling->keys[0]);
+                rightSibling->keys.erase(rightSibling->keys.begin());
+                parent->keys[parentIdx] = rightSibling->keys[0];
+            }
+        }
+
+        if (inner != nullptr) {
+            inner->keys[innerIdx] = current->keys[0];
+        }
+    }
 }
 
 void BplusTree::bfs() {
@@ -156,21 +228,4 @@ void BplusTree::bfs() {
     }
 
     outfile.close();
-}
-
-Node* BplusTree::getParent(Node* current, Node* child) {
-    Node* parent;
-    if (current->isLeaf || current->children[0]->isLeaf) return nullptr;
-
-    for (int i = 0; i < current->children.size(); i++) {
-        if (current->children[i] == child) {
-            parent = current;
-            return parent;
-        } else {
-            parent = getParent(current->children[i], child);
-            if (parent != nullptr) return parent;
-        }
-    }
-
-    return parent;
 }
